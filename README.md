@@ -1,5 +1,6 @@
 # CafeLang
 
+A linguagem para seu café do dia a dia
 
 ## EBNF
 ```
@@ -132,3 +133,60 @@ ESCAPE          = "\\" ( "\"" | "\\" | "n" | "t" ) ;
 CHAR            = ? qualquer caractere exceto aspas duplas e nova linha ? ;
 ```
 
+
+---
+
+## Compilação e Teste (Flex e Bison)
+
+### Pré-requisitos
+
+Instale as ferramentas necessárias:
+
+```bash
+sudo apt-get install gcc flex bison make
+```
+
+### Compilar o Compilador
+
+```bash
+make
+```
+
+Este comando irá:
+1. Gerar o analisador léxico com Flex (`cafelang.l`)
+2. Gerar o analisador sintático com Bison (`cafelang.y`)
+3. Compilar e criar o executável `cafelang`
+
+### Testar o Compilador
+
+```bash
+make test
+```
+
+Ou manualmente:
+
+```bash
+./cafelang exemplo_simples.cafe output.asm
+```
+
+### Exemplo de Programa
+
+Veja `exemplo_simples.cafe` para um exemplo funcional que demonstra:
+- Declarações de variáveis e constantes
+- Receitas
+- Reações a eventos
+- Estruturas de controle (if/else, while, repeat, for-range)
+- Expressões aritméticas e booleanas
+- Uso de sensores
+
+### Limpeza
+
+```bash
+make clean
+```
+
+### Saída
+
+O compilador gera:
+- Mensagem de sucesso ou erro no terminal
+- Arquivo `.asm` com código assembly

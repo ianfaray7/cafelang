@@ -1,0 +1,46 @@
+// Exemplo de CafeLang
+// Demonstra as características principais da linguagem
+
+// Declarações globais
+def contador: num := 0;
+const MAX_TEMP: num := 95;
+
+// Receita básica
+receita "Cafe Simples" {
+    moer 14 g;
+    servir 50 ml;
+    limpar;
+}
+
+// Reações a eventos
+quando pronto -> tocar "OK";
+quando erro -> limpar;
+
+// Controle if-else
+se (temp() > 90) {
+    tocar "Quente";
+} senao {
+    aquecer 90 °C;
+}
+
+// Loop while
+enquanto (agua() > 100) {
+    pausar 1 s;
+}
+
+// Loop repeat
+repetir 3 vezes {
+    moer 7 g;
+}
+
+// Loop for-range
+para i em 1 .. 5 {
+    pausar 2 s;
+}
+
+// Expressões
+def resultado: bool;
+resultado := verdadeiro e falso;
+
+def soma: num;
+soma := 10 + 5;
