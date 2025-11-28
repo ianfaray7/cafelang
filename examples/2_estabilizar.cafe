@@ -1,0 +1,6 @@
+receita "estabilizar_temp" {
+  // Aquece até atingir temperatura alvo
+  aquecer 93 C;
+  pausar 300 ms;
+  tocar "ok";
+}

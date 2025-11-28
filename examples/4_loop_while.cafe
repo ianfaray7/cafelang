@@ -1,0 +1,12 @@
+// Exemplo 4: Receita com Variáveis
+// Demonstra: variáveis em receitas, ações
+
+receita "aquecer_simples" {
+    def temperatura_alvo: num := 93;
+    
+    aquecer 95 C;
+    pausar 500 ms;
+    
+    tocar "temperatura_ok";
+    servir 40 ml;
+}

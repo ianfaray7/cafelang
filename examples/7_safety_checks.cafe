@@ -1,0 +1,15 @@
+// Exemplo 7: Verificações de Segurança
+// Demonstra: if-else, sensores, receitas
+
+receita "cafe_seguro" {
+    moer 18 g;
+    aquecer 93 C;
+    servir 40 ml;
+    tocar "pronto";
+    limpar;
+}
+
+// Reações a eventos
+quando pronto -> tocar "beep";
+quando erro -> limpar;
+quando sem_agua -> tocar "adicione_agua";

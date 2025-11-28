@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 extern int yylex();
 extern int yyparse();
@@ -12,6 +13,37 @@ extern int col_num;
 void yyerror(const char *s);
 
 FILE *output_file;
+
+// Contador de labels
+int label_counter = 0;
+int temp_counter = 0;
+
+// Funções auxiliares de geração de código
+void emit(const char *fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    vfprintf(output_file, fmt, args);
+    va_end(args);
+}
+
+void emit_comment(const char *comment) {
+    fprintf(output_file, "; %s\n", comment);
+}
+
+int new_label() {
+    return label_counter++;
+}
+
+const char* map_sensor(const char *sensor) {
+    if (strcmp(sensor, "temp") == 0) return "TEMP_SENSOR";
+    if (strcmp(sensor, "pressao") == 0) return "PRESSURE";
+    if (strcmp(sensor, "agua") == 0) return "WATER_LEVEL";
+    if (strcmp(sensor, "graos") == 0) return "BEAN_LEVEL";
+    if (strcmp(sensor, "fluxo") == 0) return "FLOW_RATE";
+    if (strcmp(sensor, "copo") == 0) return "CUP_PRESENT";
+    if (strcmp(sensor, "porta") == 0) return "DOOR_OPEN";
+    return "UNKNOWN";
+}
 %}
 
 %union {
@@ -65,7 +97,10 @@ FILE *output_file;
 %%
 
 program:
-    toplevel_list
+    toplevel_list { 
+        emit("\n; Fim do programa\n");
+        emit("HALT\n");
+    }
     ;
 
 toplevel_list:
@@ -79,7 +114,9 @@ toplevel:
     | stmt
     ;
 receita:
-    RECEITA STRING bloco_receita
+    RECEITA STRING bloco_receita {
+        emit_comment("=== Fim da receita ===");
+    }
     ;
 
 bloco_receita:
@@ -151,8 +188,15 @@ decl:
     ;
 
 var_decl:
-    DEF IDENTIFIER COLON tipo SEMICOLON
-    | DEF IDENTIFIER COLON tipo ASSIGN_OP expr SEMICOLON
+    DEF IDENTIFIER COLON tipo SEMICOLON {
+        emit("; variable declaration: %s\n", $2);
+        free($2);
+    }
+    | DEF IDENTIFIER COLON tipo ASSIGN_OP expr SEMICOLON {
+        emit("; variable declaration with init: %s\n", $2);
+        emit("SET R0 %.2f\n", $<num>6);
+        free($2);
+    }
     ;
 
 const_decl:
@@ -196,7 +240,10 @@ bloco_item:
     ;
 
 assign:
-    lvalue ASSIGN_OP expr
+    lvalue ASSIGN_OP expr {
+        emit("; assignment: %s := <expr>\n", $<str>1);
+        emit("; Simplified: store result in memory location for %s\n", $<str>1);
+    }
     ;
 
 lvalue:
@@ -204,38 +251,110 @@ lvalue:
     ;
 
 if_stmt:
-    SE LPAREN expr RPAREN stmt
-    | SE LPAREN expr RPAREN stmt SENAO stmt
+    SE LPAREN expr RPAREN {
+        int label_end = new_label();
+        emit("; if statement\n");
+        emit("SET R0 0\n");
+        emit("CMP TEMP R0\n");
+        emit("JE L%d\n", label_end);
+        $<num>$ = label_end;
+    } stmt {
+        emit("L%d:\n", (int)$<num>5);
+    }
+    | SE LPAREN expr RPAREN {
+        int label_else = new_label();
+        emit("; if-else statement\n");
+        emit("SET R0 0\n");
+        emit("CMP TEMP R0\n");
+        emit("JE L%d\n", label_else);
+        $<num>$ = label_else;
+    } stmt SENAO {
+        int label_end = new_label();
+        emit("GOTO L%d\n", label_end);
+        emit("L%d:\n", (int)$<num>5);
+        $<num>$ = label_end;
+    } stmt {
+        emit("L%d:\n", (int)$<num>8);
+    }
     ;
 
 while_stmt:
-    ENQUANTO LPAREN expr RPAREN stmt
+    ENQUANTO {
+        int label_start = new_label();
+        emit("L%d:\n", label_start);
+        emit("; while loop\n");
+        $<num>$ = label_start;
+    } LPAREN expr RPAREN {
+        int label_end = new_label();
+        emit("SET R0 0\n");
+        emit("CMP TEMP R0\n");
+        emit("JE L%d\n", label_end);
+        $<num>$ = label_end;
+    } stmt {
+        emit("GOTO L%d\n", (int)$<num>2);
+        emit("L%d:\n", (int)$<num>6);
+    }
     ;
 
 repeat_stmt:
-    REPETIR expr VEZES bloco
+    REPETIR expr VEZES {
+        emit("; repeat loop\n");
+        emit("SET R1 %.0f\n", $<num>2);
+        int label_start = new_label();
+        int label_end = new_label();
+        emit("L%d:\n", label_start);
+        emit("DECJZ R1 L%d\n", label_end);
+        $<num>$ = label_start;
+        $<num>3 = label_end;
+    } bloco {
+        emit("GOTO L%d\n", (int)$<num>4);
+        emit("L%d:\n", (int)$<num>3);
+    }
     ;
 
 for_range_stmt:
-    PARA IDENTIFIER EM expr RANGE expr bloco
+    PARA IDENTIFIER EM expr RANGE expr {
+        emit("; for-range loop: %s\n", $2);
+        emit("SET R2 %.0f\n", $<num>4);  // start
+        emit("SET R3 %.0f\n", $<num>6);  // end
+        int label_start = new_label();
+        int label_end = new_label();
+        emit("L%d:\n", label_start);
+        emit("CMP R2 R3\n");
+        emit("JG L%d\n", label_end);
+        $<num>$ = label_start;
+        $<num>6 = label_end;
+    } bloco {
+        emit("INC R2\n");
+        emit("GOTO L%d\n", (int)$<num>7);
+        emit("L%d:\n", (int)$<num>6);
+    }
     ;
 
 ato:
-    acao
-    | acao argumentos
+    acao {
+        // Ação sem argumentos
+        char action_name[64];
+        sprintf(action_name, "ACTION %s", $<str>1);
+        emit("%s\n", action_name);
+    }
+    | acao argumentos {
+        // Ação com argumentos (simplificado)
+        emit("; Acao com argumentos\n");
+    }
     ;
 
 acao:
-    MOER
-    | AQUECER
-    | BOMBEAR
-    | SERVIR
-    | VAPORIZAR
-    | PAUSAR
-    | TOCAR
-    | LIMPAR
-    | ENXAGUAR
-    | DESPRESSURIZAR
+    MOER { $<str>$ = strdup("moer"); }
+    | AQUECER { $<str>$ = strdup("aquecer"); }
+    | BOMBEAR { $<str>$ = strdup("bombear"); }
+    | SERVIR { $<str>$ = strdup("servir"); }
+    | VAPORIZAR { $<str>$ = strdup("vaporizar"); }
+    | PAUSAR { $<str>$ = strdup("pausar"); }
+    | TOCAR { $<str>$ = strdup("tocar"); }
+    | LIMPAR { $<str>$ = strdup("limpar"); }
+    | ENXAGUAR { $<str>$ = strdup("enxaguar"); }
+    | DESPRESSURIZAR { $<str>$ = strdup("despressurizar"); }
     ;
 
 argumentos:
@@ -283,16 +402,37 @@ relational:
     ;
 
 additive:
-    multiplicative
-    | additive PLUS multiplicative
-    | additive MINUS multiplicative
+    multiplicative { $<num>$ = $<num>1; }
+    | additive PLUS multiplicative {
+        emit("; addition\n");
+        emit("ADD TEMP R0\n");
+        $<num>$ = $<num>1 + $<num>3;
+    }
+    | additive MINUS multiplicative {
+        emit("; subtraction\n");
+        emit("SUB TEMP R0\n");
+        $<num>$ = $<num>1 - $<num>3;
+    }
     ;
 
 multiplicative:
-    unary
-    | multiplicative MULT unary
-    | multiplicative DIV unary
-    | multiplicative MOD unary
+    unary { $<num>$ = $<num>1; }
+    | multiplicative MULT unary {
+        emit("; multiplication\n");
+        emit("MUL TEMP R0\n");
+        $<num>$ = $<num>1 * $<num>3;
+    }
+    | multiplicative DIV unary {
+        emit("; division\n");
+        emit("DIV TEMP R0\n");
+        if ($<num>3 != 0) $<num>$ = $<num>1 / $<num>3;
+        else $<num>$ = 0;
+    }
+    | multiplicative MOD unary {
+        emit("; modulo\n");
+        emit("MOD TEMP R0\n");
+        $<num>$ = 0;
+    }
     ;
 
 unary:
@@ -304,31 +444,59 @@ unary:
     ;
 
 primary:
-    NUMBER
-    | bool_literal
-    | STRING
-    | sensor_zeroarg
-    | lvalue
-    | LPAREN expr RPAREN
+    NUMBER { 
+        $<num>$ = $1;
+        emit("; push number %.2f\n", $1);
+    }
+    | bool_literal {
+        $<num>$ = $<num>1;
+    }
+    | STRING { 
+        emit("; string literal: %s\n", $1);
+        free($1);
+        $<num>$ = 0;
+    }
+    | sensor_zeroarg {
+        $<num>$ = 0;
+    }
+    | lvalue {
+        emit("; load variable: %s\n", $<str>1);
+        free($<str>1);
+        $<num>$ = 0;
+    }
+    | LPAREN expr RPAREN {
+        $<num>$ = $<num>2;
+    }
     ;
 
 bool_literal:
-    VERDADEIRO
-    | FALSO
+    VERDADEIRO { 
+        $<num>$ = 1.0;
+        emit("; boolean true\n");
+    }
+    | FALSO { 
+        $<num>$ = 0.0;
+        emit("; boolean false\n");
+    }
     ;
 
 sensor_zeroarg:
-    sensor_nome LPAREN RPAREN
+    sensor_nome LPAREN RPAREN {
+        const char *mapped = map_sensor($<str>1);
+        emit("; sensor read: %s\n", $<str>1);
+        emit("LOAD TEMP %s\n", mapped);
+        free($<str>1);
+    }
     ;
 
 sensor_nome:
-    TEMP
-    | PRESSAO
-    | AGUA
-    | GRAOS
-    | FLUXO
-    | COPO
-    | PORTA
+    TEMP { $<str>$ = strdup("temp"); }
+    | PRESSAO { $<str>$ = strdup("pressao"); }
+    | AGUA { $<str>$ = strdup("agua"); }
+    | GRAOS { $<str>$ = strdup("graos"); }
+    | FLUXO { $<str>$ = strdup("fluxo"); }
+    | COPO { $<str>$ = strdup("copo"); }
+    | PORTA { $<str>$ = strdup("porta"); }
     ;
 
 medida_vol:

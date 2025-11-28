@@ -1,0 +1,13 @@
+=== Carregando programa: ./test_output/6_for_range.asm ===
+
+Estado inicial: {'TEMP': 25.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 0.0, 'R1': 0.0, 'R2': 0.0, 'R3': 0.0}
+
+=== Executando ===
+
+=== PROGRAMA FINALIZADO ===
+
+=== Estado final ===
+Registradores: {'TEMP': 25.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 0.0, 'R1': 0.0, 'R2': 6.0, 'R3': 5.0}
+Pilha: []
+Ações executadas: []
+Total de passos: 25

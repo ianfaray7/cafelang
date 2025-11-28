@@ -1,0 +1,38 @@
+// Exemplo 8: Perfis de Sabor Diferentes
+// Demonstra: receitas múltiplas, perfis sensoriais
+
+receita "espresso_forte" {
+    perfil {
+        corpo intenso;
+        acidez medio;
+        aroma forte;
+        intensidade intenso;
+    };
+    
+    temperatura 94 °C;
+    pressao_alvo 9 bar;
+    extrair 35 ml em 25 s;
+    
+    moer 19 g;
+    aquecer 94 C;
+    servir 35 ml;
+    limpar;
+}
+
+receita "cafe_suave" {
+    perfil {
+        corpo suave;
+        acidez suave;
+        aroma medio;
+        intensidade medio;
+    };
+    
+    temperatura 88 °C;
+    pressao_alvo 7 bar;
+    extrair 50 ml em 30 s;
+    
+    moer 14 g;
+    aquecer 88 C;
+    servir 50 ml;
+    limpar;
+}

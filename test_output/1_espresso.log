@@ -1,0 +1,13 @@
+=== Carregando programa: ./test_output/1_espresso.asm ===
+
+Estado inicial: {'TEMP': 25.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 0.0, 'R1': 0.0, 'R2': 0.0, 'R3': 0.0}
+
+=== Executando ===
+
+=== PROGRAMA FINALIZADO ===
+
+=== Estado final ===
+Registradores: {'TEMP': 1.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 18.0, 'R1': 0.0, 'R2': 0.0, 'R3': 0.0}
+Pilha: []
+Ações executadas: []
+Total de passos: 7

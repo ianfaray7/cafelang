@@ -1,0 +1,13 @@
+// Exemplo 6: For-Range
+// Demonstra: for-range dentro de receita
+
+receita "for_loop_test" {
+    def i: num;
+
+    para i em 1 .. 5 {
+        pausar 100 ms;
+    }
+
+    servir 50 ml;
+    tocar "pronto";
+}

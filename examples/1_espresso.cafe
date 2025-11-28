@@ -1,0 +1,14 @@
+receita "espresso_seguro" {
+  se (porta() || !copo()) {
+    tocar "alerta";
+    sair;
+  }
+  def dose: num := 18;
+  moer 18 g;
+  aquecer 93 C;
+  bombear 500 ms;
+  servir 35 ml;
+  tocar "bip_duplo";
+}
+
+quando sem_agua -> tocar "tanque_vazio";

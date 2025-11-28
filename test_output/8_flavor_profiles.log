@@ -1,0 +1,15 @@
+=== Carregando programa: ./test_output/8_flavor_profiles.asm ===
+
+Estado inicial: {'TEMP': 25.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 0.0, 'R1': 0.0, 'R2': 0.0, 'R3': 0.0}
+
+=== Executando ===
+
+[ACTION] limpar()
+[ACTION] limpar()
+=== PROGRAMA FINALIZADO ===
+
+=== Estado final ===
+Registradores: {'TEMP': 25.0, 'POWER': 0.0, 'VOLUME': 0.0, 'TIME': 0.0, 'R0': 0.0, 'R1': 0.0, 'R2': 0.0, 'R3': 0.0}
+Pilha: []
+Ações executadas: ['limpar()', 'limpar()']
+Total de passos: 3

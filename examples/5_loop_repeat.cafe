@@ -1,0 +1,13 @@
+// Exemplo 5: Loop Repeat
+// Demonstra: repetir N vezes dentro de receita
+
+receita "lote_cafes" {
+    const CAFES_PREPARAR: num := 3;
+
+    repetir 3 vezes {
+        moer 14 g;
+        pausar 2 s;
+    }
+
+    tocar "lote_completo";
+}

@@ -1,0 +1,44 @@
+// Exemplo 10: Programa Completo
+// Demonstra: receitas, perfis, variáveis, loops, eventos
+
+const DOSE_PADRAO: num := 16;
+def contador_cafes: num := 0;
+
+receita "cafe_completo" {
+    perfil {
+        corpo forte;
+        acidez medio;
+        aroma intenso;
+        intensidade forte;
+    };
+    
+    temperatura 93 °C;
+    pressao_alvo 9 bar;
+    extrair 40 ml em 27 s;
+    
+    moer 16 g;
+    aquecer 93 C;
+    servir 40 ml;
+    
+    // Prepara múltiplos cafés em loop
+    repetir 2 vezes {
+        moer 14 g;
+        servir 40 ml;
+        pausar 2 s;
+    }
+    
+    limpar;
+    tocar "pronto";
+}
+
+receita "cafe_rapido" {
+    temperatura 85 °C;
+    moer 12 g;
+    aquecer 85 C;
+    servir 35 ml;
+    tocar "rapido_pronto";
+}
+
+quando pronto -> tocar "bip_duplo";
+quando erro -> limpar;
+quando sem_agua -> tocar "agua_vazia";

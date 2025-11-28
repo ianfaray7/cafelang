@@ -1,0 +1,4 @@
+receita "faltando_ponto_virgula" {
+  moer 18 g
+  aquecer 93 C;
+}

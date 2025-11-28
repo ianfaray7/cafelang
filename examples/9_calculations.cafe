@@ -1,0 +1,17 @@
+// Exemplo 9: Operações e Variáveis
+// Demonstra: variáveis, atribuições, booleanos
+
+receita "calculo_simples" {
+    def dose_base: num := 14;
+    def dose_total: num;
+
+    dose_total := 30;
+
+    // Comparações simples
+    def temperatura_ok: bool;
+    temperatura_ok := verdadeiro;
+
+    moer 14 g;
+    servir 50 ml;
+    tocar "ok";
+}

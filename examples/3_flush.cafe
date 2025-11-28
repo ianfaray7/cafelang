@@ -1,0 +1,9 @@
+receita "flush_progressivo" {
+  def i: num;
+  para i em 1 .. 3 {
+    bombear 250 ms;
+    pausar 200 ms;
+  }
+  limpar;
+  tocar "fim_flush";
+}

@@ -1,5 +1,10 @@
+Rules useless in parser due to conflicts
+
+   70 @2: ε
+
+
+State 137 conflicts: 8 reduce/reduce
 State 159 conflicts: 2 reduce/reduce
-State 183 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -98,103 +103,118 @@ Grammar
 
    67 lvalue: IDENTIFIER
 
-   68 if_stmt: SE LPAREN expr RPAREN stmt
-   69        | SE LPAREN expr RPAREN stmt SENAO stmt
+   68 @1: ε
 
-   70 while_stmt: ENQUANTO LPAREN expr RPAREN stmt
+   69 if_stmt: SE LPAREN expr RPAREN @1 stmt
 
-   71 repeat_stmt: REPETIR expr VEZES bloco
+   70 @2: ε
 
-   72 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr bloco
+   71 @3: ε
 
-   73 ato: acao
-   74    | acao argumentos
+   72 if_stmt: SE LPAREN expr RPAREN @2 stmt SENAO @3 stmt
 
-   75 acao: MOER
-   76     | AQUECER
-   77     | BOMBEAR
-   78     | SERVIR
-   79     | VAPORIZAR
-   80     | PAUSAR
-   81     | TOCAR
-   82     | LIMPAR
-   83     | ENXAGUAR
-   84     | DESPRESSURIZAR
+   73 @4: ε
 
-   85 argumentos: arg
-   86           | argumentos COMMA arg
+   74 @5: ε
 
-   87 arg: expr
-   88    | medida_vol
-   89    | medida_peso
-   90    | medida_temp
-   91    | medida_tempo
-   92    | STRING
+   75 while_stmt: ENQUANTO @4 LPAREN expr RPAREN @5 stmt
 
-   93 expr: logic_or
+   76 @6: ε
 
-   94 logic_or: logic_and
-   95         | logic_or OU logic_and
-   96         | logic_or OR_OP logic_and
+   77 repeat_stmt: REPETIR expr VEZES @6 bloco
 
-   97 logic_and: equality
-   98          | logic_and E equality
-   99          | logic_and AND_OP equality
+   78 @7: ε
 
-  100 equality: relational
-  101         | equality EQ_OP relational
-  102         | equality NE_OP relational
+   79 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr @7 bloco
 
-  103 relational: additive
-  104           | relational LT_OP additive
-  105           | relational LE_OP additive
-  106           | relational GT_OP additive
-  107           | relational GE_OP additive
+   80 ato: acao
+   81    | acao argumentos
 
-  108 additive: multiplicative
-  109         | additive PLUS multiplicative
-  110         | additive MINUS multiplicative
+   82 acao: MOER
+   83     | AQUECER
+   84     | BOMBEAR
+   85     | SERVIR
+   86     | VAPORIZAR
+   87     | PAUSAR
+   88     | TOCAR
+   89     | LIMPAR
+   90     | ENXAGUAR
+   91     | DESPRESSURIZAR
 
-  111 multiplicative: unary
-  112               | multiplicative MULT unary
-  113               | multiplicative DIV unary
-  114               | multiplicative MOD unary
+   92 argumentos: arg
+   93           | argumentos COMMA arg
 
-  115 unary: primary
-  116      | PLUS unary
-  117      | MINUS unary
-  118      | NOT unary
-  119      | NAO unary
+   94 arg: expr
+   95    | medida_vol
+   96    | medida_peso
+   97    | medida_temp
+   98    | medida_tempo
+   99    | STRING
 
-  120 primary: NUMBER
-  121        | bool_literal
-  122        | STRING
-  123        | sensor_zeroarg
-  124        | lvalue
-  125        | LPAREN expr RPAREN
+  100 expr: logic_or
 
-  126 bool_literal: VERDADEIRO
-  127             | FALSO
+  101 logic_or: logic_and
+  102         | logic_or OU logic_and
+  103         | logic_or OR_OP logic_and
 
-  128 sensor_zeroarg: sensor_nome LPAREN RPAREN
+  104 logic_and: equality
+  105          | logic_and E equality
+  106          | logic_and AND_OP equality
 
-  129 sensor_nome: TEMP
-  130            | PRESSAO
-  131            | AGUA
-  132            | GRAOS
-  133            | FLUXO
-  134            | COPO
-  135            | PORTA
+  107 equality: relational
+  108         | equality EQ_OP relational
+  109         | equality NE_OP relational
 
-  136 medida_vol: NUMBER ML_TYPE
+  110 relational: additive
+  111           | relational LT_OP additive
+  112           | relational LE_OP additive
+  113           | relational GT_OP additive
+  114           | relational GE_OP additive
 
-  137 medida_peso: NUMBER G_TYPE
+  115 additive: multiplicative
+  116         | additive PLUS multiplicative
+  117         | additive MINUS multiplicative
 
-  138 medida_tempo: NUMBER S_TYPE
-  139             | NUMBER MS_TYPE
+  118 multiplicative: unary
+  119               | multiplicative MULT unary
+  120               | multiplicative DIV unary
+  121               | multiplicative MOD unary
 
-  140 medida_temp: NUMBER CELSIUS_UNIT
-  141            | NUMBER C_UNIT
+  122 unary: primary
+  123      | PLUS unary
+  124      | MINUS unary
+  125      | NOT unary
+  126      | NAO unary
+
+  127 primary: NUMBER
+  128        | bool_literal
+  129        | STRING
+  130        | sensor_zeroarg
+  131        | lvalue
+  132        | LPAREN expr RPAREN
+
+  133 bool_literal: VERDADEIRO
+  134             | FALSO
+
+  135 sensor_zeroarg: sensor_nome LPAREN RPAREN
+
+  136 sensor_nome: TEMP
+  137            | PRESSAO
+  138            | AGUA
+  139            | GRAOS
+  140            | FLUXO
+  141            | COPO
+  142            | PORTA
+
+  143 medida_vol: NUMBER ML_TYPE
+
+  144 medida_peso: NUMBER G_TYPE
+
+  145 medida_tempo: NUMBER S_TYPE
+  146             | NUMBER MS_TYPE
+
+  147 medida_temp: NUMBER CELSIUS_UNIT
+  148            | NUMBER C_UNIT
 
 
 Terminals, with rules where they appear
@@ -206,7 +226,7 @@ Terminals, with rules where they appear
     PERFIL (260) 23
     TEMPERATURA (261) 24
     EXTRAIR (262) 25
-    EM (263) 25 72
+    EM (263) 25 79
     PRESSAO_ALVO (264) 26
     PRONTO (265) 17
     ERRO (266) 18
@@ -227,71 +247,71 @@ Terminals, with rules where they appear
     NUM_TYPE (281) 44
     BOOL_TYPE (282) 45
     TEXTO_TYPE (283) 46
-    ML_TYPE (284) 47 136
-    G_TYPE (285) 48 137
-    S_TYPE (286) 49 138
-    MS_TYPE (287) 50 139
+    ML_TYPE (284) 47 143
+    G_TYPE (285) 48 144
+    S_TYPE (286) 49 145
+    MS_TYPE (287) 50 146
     CELSIUS_TYPE (288) 51
-    SE (289) 68 69
-    SENAO (290) 69
-    ENQUANTO (291) 70
-    REPETIR (292) 71
-    VEZES (293) 71
-    PARA (294) 72
+    SE (289) 69 72
+    SENAO (290) 72
+    ENQUANTO (291) 75
+    REPETIR (292) 77
+    VEZES (293) 77
+    PARA (294) 79
     SAIR (295) 57
     PULAR (296) 58
-    MOER (297) 75
-    AQUECER (298) 76
-    BOMBEAR (299) 77
-    SERVIR (300) 78
-    VAPORIZAR (301) 79
-    PAUSAR (302) 80
-    TOCAR (303) 81
-    LIMPAR (304) 82
-    ENXAGUAR (305) 83
-    DESPRESSURIZAR (306) 84
-    TEMP (307) 129
-    PRESSAO (308) 130
-    AGUA (309) 131
-    GRAOS (310) 132
-    FLUXO (311) 133
-    COPO (312) 134
-    PORTA (313) 135
-    VERDADEIRO (314) 126
-    FALSO (315) 127
-    OU (316) 95
-    E (317) 98
-    NAO (318) 119
-    OR_OP (319) 96
-    AND_OP (320) 99
-    EQ_OP (321) 101
-    NE_OP (322) 102
-    LE_OP (323) 105
-    GE_OP (324) 107
-    LT_OP (325) 104
-    GT_OP (326) 106
+    MOER (297) 82
+    AQUECER (298) 83
+    BOMBEAR (299) 84
+    SERVIR (300) 85
+    VAPORIZAR (301) 86
+    PAUSAR (302) 87
+    TOCAR (303) 88
+    LIMPAR (304) 89
+    ENXAGUAR (305) 90
+    DESPRESSURIZAR (306) 91
+    TEMP (307) 136
+    PRESSAO (308) 137
+    AGUA (309) 138
+    GRAOS (310) 139
+    FLUXO (311) 140
+    COPO (312) 141
+    PORTA (313) 142
+    VERDADEIRO (314) 133
+    FALSO (315) 134
+    OU (316) 102
+    E (317) 105
+    NAO (318) 126
+    OR_OP (319) 103
+    AND_OP (320) 106
+    EQ_OP (321) 108
+    NE_OP (322) 109
+    LE_OP (323) 112
+    GE_OP (324) 114
+    LT_OP (325) 111
+    GT_OP (326) 113
     ASSIGN_OP (327) 42 43 66
     ARROW (328) 16
-    RANGE (329) 72
+    RANGE (329) 79
     BAR (330) 26
-    CELSIUS_UNIT (331) 140
-    C_UNIT (332) 141
+    CELSIUS_UNIT (331) 147
+    C_UNIT (332) 148
     LBRACE (333) 9 23 60
     RBRACE (334) 9 23 60
-    LPAREN (335) 68 69 70 125 128
-    RPAREN (336) 68 69 70 125 128
+    LPAREN (335) 69 72 75 132 135
+    RPAREN (336) 69 72 75 132 135
     SEMICOLON (337) 15 16 23 24 25 26 29 30 31 32 41 42 43 52 57 58 65
     COLON (338) 41 42 43
-    COMMA (339) 86
-    PLUS (340) 109 116
-    MINUS (341) 110 117
-    MULT (342) 112
-    DIV (343) 113
-    MOD (344) 114
-    NOT (345) 118
-    IDENTIFIER <str> (346) 41 42 43 67 72
-    STRING <str> (347) 8 92 122
-    NUMBER <num> (348) 26 120 136 137 138 139 140 141
+    COMMA (339) 93
+    PLUS (340) 116 123
+    MINUS (341) 117 124
+    MULT (342) 119
+    DIV (343) 120
+    MOD (344) 121
+    NOT (345) 125
+    IDENTIFIER <str> (346) 41 42 43 67 79
+    STRING <str> (347) 8 99 129
+    NUMBER <num> (348) 26 127 143 144 145 146 147 148
     UMINUS (349)
     UPLUS (350)
 
@@ -359,10 +379,10 @@ Nonterminals, with rules where they appear
         on right: 41 42 43
     stmt (116)
         on left: 52 53 54 55 56 57 58 59
-        on right: 7 14 64 68 69 70
+        on right: 7 14 64 69 72 75
     bloco (117)
         on left: 60
-        on right: 59 71 72
+        on right: 59 77 79
     bloco_items (118)
         on left: 61 62
         on right: 60 62
@@ -374,79 +394,100 @@ Nonterminals, with rules where they appear
         on right: 52
     lvalue (121)
         on left: 67
-        on right: 66 124
+        on right: 66 131
     if_stmt (122)
-        on left: 68 69
+        on left: 69 72
         on right: 53
-    while_stmt (123)
+    @1 (123)
+        on left: 68
+        on right: 69
+    @2 (124)
         on left: 70
-        on right: 54
-    repeat_stmt (124)
+        on right: 72
+    @3 (125)
         on left: 71
+        on right: 72
+    while_stmt (126)
+        on left: 75
+        on right: 54
+    @4 (127)
+        on left: 73
+        on right: 75
+    @5 (128)
+        on left: 74
+        on right: 75
+    repeat_stmt (129)
+        on left: 77
         on right: 55
-    for_range_stmt (125)
-        on left: 72
+    @6 (130)
+        on left: 76
+        on right: 77
+    for_range_stmt (131)
+        on left: 79
         on right: 56
-    ato (126)
-        on left: 73 74
+    @7 (132)
+        on left: 78
+        on right: 79
+    ato (133)
+        on left: 80 81
         on right: 15 16 65
-    acao (127)
-        on left: 75 76 77 78 79 80 81 82 83 84
-        on right: 73 74
-    argumentos (128)
-        on left: 85 86
-        on right: 74 86
-    arg (129)
-        on left: 87 88 89 90 91 92
-        on right: 85 86
-    expr (130)
-        on left: 93
-        on right: 42 43 66 68 69 70 71 72 87 125
-    logic_or (131)
-        on left: 94 95 96
-        on right: 93 95 96
-    logic_and (132)
-        on left: 97 98 99
-        on right: 94 95 96 98 99
-    equality (133)
-        on left: 100 101 102
-        on right: 97 98 99 101 102
-    relational (134)
-        on left: 103 104 105 106 107
-        on right: 100 101 102 104 105 106 107
-    additive (135)
-        on left: 108 109 110
-        on right: 103 104 105 106 107 109 110
-    multiplicative (136)
-        on left: 111 112 113 114
-        on right: 108 109 110 112 113 114
-    unary (137)
-        on left: 115 116 117 118 119
-        on right: 111 112 113 114 116 117 118 119
-    primary (138)
-        on left: 120 121 122 123 124 125
-        on right: 115
-    bool_literal (139)
-        on left: 126 127
-        on right: 121
-    sensor_zeroarg (140)
-        on left: 128
-        on right: 123
-    sensor_nome (141)
-        on left: 129 130 131 132 133 134 135
+    acao (134)
+        on left: 82 83 84 85 86 87 88 89 90 91
+        on right: 80 81
+    argumentos (135)
+        on left: 92 93
+        on right: 81 93
+    arg (136)
+        on left: 94 95 96 97 98 99
+        on right: 92 93
+    expr (137)
+        on left: 100
+        on right: 42 43 66 69 72 75 77 79 94 132
+    logic_or (138)
+        on left: 101 102 103
+        on right: 100 102 103
+    logic_and (139)
+        on left: 104 105 106
+        on right: 101 102 103 105 106
+    equality (140)
+        on left: 107 108 109
+        on right: 104 105 106 108 109
+    relational (141)
+        on left: 110 111 112 113 114
+        on right: 107 108 109 111 112 113 114
+    additive (142)
+        on left: 115 116 117
+        on right: 110 111 112 113 114 116 117
+    multiplicative (143)
+        on left: 118 119 120 121
+        on right: 115 116 117 119 120 121
+    unary (144)
+        on left: 122 123 124 125 126
+        on right: 118 119 120 121 123 124 125 126
+    primary (145)
+        on left: 127 128 129 130 131 132
+        on right: 122
+    bool_literal (146)
+        on left: 133 134
         on right: 128
-    medida_vol (142)
-        on left: 136
-        on right: 25 88
-    medida_peso (143)
-        on left: 137
-        on right: 89
-    medida_tempo (144)
-        on left: 138 139
-        on right: 25 91
-    medida_temp (145)
-        on left: 140 141
-        on right: 24 90
+    sensor_zeroarg (147)
+        on left: 135
+        on right: 130
+    sensor_nome (148)
+        on left: 136 137 138 139 140 141 142
+        on right: 135
+    medida_vol (149)
+        on left: 143
+        on right: 25 95
+    medida_peso (150)
+        on left: 144
+        on right: 96
+    medida_tempo (151)
+        on left: 145 146
+        on right: 25 98
+    medida_temp (152)
+        on left: 147 148
+        on right: 24 97
 
 
 State 0
@@ -548,22 +589,24 @@ State 7
 
 State 8
 
-   68 if_stmt: SE • LPAREN expr RPAREN stmt
-   69        | SE • LPAREN expr RPAREN stmt SENAO stmt
+   69 if_stmt: SE • LPAREN expr RPAREN @1 stmt
+   72        | SE • LPAREN expr RPAREN @2 stmt SENAO @3 stmt
 
     LPAREN  shift, and go to state 41
 
 
 State 9
 
-   70 while_stmt: ENQUANTO • LPAREN expr RPAREN stmt
+   75 while_stmt: ENQUANTO • @4 LPAREN expr RPAREN @5 stmt
 
-    LPAREN  shift, and go to state 42
+    $default  reduce using rule 73 (@4)
+
+    @4  go to state 42
 
 
 State 10
 
-   71 repeat_stmt: REPETIR • expr VEZES bloco
+   77 repeat_stmt: REPETIR • expr VEZES @6 bloco
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -600,7 +643,7 @@ State 10
 
 State 11
 
-   72 for_range_stmt: PARA • IDENTIFIER EM expr RANGE expr bloco
+   79 for_range_stmt: PARA • IDENTIFIER EM expr RANGE expr @7 bloco
 
     IDENTIFIER  shift, and go to state 72
 
@@ -815,8 +858,8 @@ State 40
 
 State 41
 
-   68 if_stmt: SE LPAREN • expr RPAREN stmt
-   69        | SE LPAREN • expr RPAREN stmt SENAO stmt
+   69 if_stmt: SE LPAREN • expr RPAREN @1 stmt
+   72        | SE LPAREN • expr RPAREN @2 stmt SENAO @3 stmt
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -853,107 +896,77 @@ State 41
 
 State 42
 
-   70 while_stmt: ENQUANTO LPAREN • expr RPAREN stmt
+   75 while_stmt: ENQUANTO @4 • LPAREN expr RPAREN @5 stmt
 
-    TEMP        shift, and go to state 43
-    PRESSAO     shift, and go to state 44
-    AGUA        shift, and go to state 45
-    GRAOS       shift, and go to state 46
-    FLUXO       shift, and go to state 47
-    COPO        shift, and go to state 48
-    PORTA       shift, and go to state 49
-    VERDADEIRO  shift, and go to state 50
-    FALSO       shift, and go to state 51
-    NAO         shift, and go to state 52
-    LPAREN      shift, and go to state 53
-    PLUS        shift, and go to state 54
-    MINUS       shift, and go to state 55
-    NOT         shift, and go to state 56
-    IDENTIFIER  shift, and go to state 15
-    STRING      shift, and go to state 57
-    NUMBER      shift, and go to state 58
-
-    lvalue          go to state 59
-    expr            go to state 84
-    logic_or        go to state 61
-    logic_and       go to state 62
-    equality        go to state 63
-    relational      go to state 64
-    additive        go to state 65
-    multiplicative  go to state 66
-    unary           go to state 67
-    primary         go to state 68
-    bool_literal    go to state 69
-    sensor_zeroarg  go to state 70
-    sensor_nome     go to state 71
+    LPAREN  shift, and go to state 84
 
 
 State 43
 
-  129 sensor_nome: TEMP •
+  136 sensor_nome: TEMP •
 
-    $default  reduce using rule 129 (sensor_nome)
+    $default  reduce using rule 136 (sensor_nome)
 
 
 State 44
 
-  130 sensor_nome: PRESSAO •
+  137 sensor_nome: PRESSAO •
 
-    $default  reduce using rule 130 (sensor_nome)
+    $default  reduce using rule 137 (sensor_nome)
 
 
 State 45
 
-  131 sensor_nome: AGUA •
+  138 sensor_nome: AGUA •
 
-    $default  reduce using rule 131 (sensor_nome)
+    $default  reduce using rule 138 (sensor_nome)
 
 
 State 46
 
-  132 sensor_nome: GRAOS •
+  139 sensor_nome: GRAOS •
 
-    $default  reduce using rule 132 (sensor_nome)
+    $default  reduce using rule 139 (sensor_nome)
 
 
 State 47
 
-  133 sensor_nome: FLUXO •
+  140 sensor_nome: FLUXO •
 
-    $default  reduce using rule 133 (sensor_nome)
+    $default  reduce using rule 140 (sensor_nome)
 
 
 State 48
 
-  134 sensor_nome: COPO •
+  141 sensor_nome: COPO •
 
-    $default  reduce using rule 134 (sensor_nome)
+    $default  reduce using rule 141 (sensor_nome)
 
 
 State 49
 
-  135 sensor_nome: PORTA •
+  142 sensor_nome: PORTA •
 
-    $default  reduce using rule 135 (sensor_nome)
+    $default  reduce using rule 142 (sensor_nome)
 
 
 State 50
 
-  126 bool_literal: VERDADEIRO •
+  133 bool_literal: VERDADEIRO •
 
-    $default  reduce using rule 126 (bool_literal)
+    $default  reduce using rule 133 (bool_literal)
 
 
 State 51
 
-  127 bool_literal: FALSO •
+  134 bool_literal: FALSO •
 
-    $default  reduce using rule 127 (bool_literal)
+    $default  reduce using rule 134 (bool_literal)
 
 
 State 52
 
-  119 unary: NAO • unary
+  126 unary: NAO • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -983,7 +996,7 @@ State 52
 
 State 53
 
-  125 primary: LPAREN • expr RPAREN
+  132 primary: LPAREN • expr RPAREN
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1020,7 +1033,7 @@ State 53
 
 State 54
 
-  116 unary: PLUS • unary
+  123 unary: PLUS • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1050,7 +1063,7 @@ State 54
 
 State 55
 
-  117 unary: MINUS • unary
+  124 unary: MINUS • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1080,7 +1093,7 @@ State 55
 
 State 56
 
-  118 unary: NOT • unary
+  125 unary: NOT • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1110,148 +1123,148 @@ State 56
 
 State 57
 
-  122 primary: STRING •
+  129 primary: STRING •
 
-    $default  reduce using rule 122 (primary)
+    $default  reduce using rule 129 (primary)
 
 
 State 58
 
-  120 primary: NUMBER •
+  127 primary: NUMBER •
 
-    $default  reduce using rule 120 (primary)
+    $default  reduce using rule 127 (primary)
 
 
 State 59
 
-  124 primary: lvalue •
+  131 primary: lvalue •
 
-    $default  reduce using rule 124 (primary)
+    $default  reduce using rule 131 (primary)
 
 
 State 60
 
-   71 repeat_stmt: REPETIR expr • VEZES bloco
+   77 repeat_stmt: REPETIR expr • VEZES @6 bloco
 
     VEZES  shift, and go to state 90
 
 
 State 61
 
-   93 expr: logic_or •
-   95 logic_or: logic_or • OU logic_and
-   96         | logic_or • OR_OP logic_and
+  100 expr: logic_or •
+  102 logic_or: logic_or • OU logic_and
+  103         | logic_or • OR_OP logic_and
 
     OU     shift, and go to state 91
     OR_OP  shift, and go to state 92
 
-    $default  reduce using rule 93 (expr)
+    $default  reduce using rule 100 (expr)
 
 
 State 62
 
-   94 logic_or: logic_and •
-   98 logic_and: logic_and • E equality
-   99          | logic_and • AND_OP equality
+  101 logic_or: logic_and •
+  105 logic_and: logic_and • E equality
+  106          | logic_and • AND_OP equality
 
     E       shift, and go to state 93
     AND_OP  shift, and go to state 94
 
-    $default  reduce using rule 94 (logic_or)
+    $default  reduce using rule 101 (logic_or)
 
 
 State 63
 
-   97 logic_and: equality •
-  101 equality: equality • EQ_OP relational
-  102         | equality • NE_OP relational
+  104 logic_and: equality •
+  108 equality: equality • EQ_OP relational
+  109         | equality • NE_OP relational
 
     EQ_OP  shift, and go to state 95
     NE_OP  shift, and go to state 96
 
-    $default  reduce using rule 97 (logic_and)
+    $default  reduce using rule 104 (logic_and)
 
 
 State 64
 
-  100 equality: relational •
-  104 relational: relational • LT_OP additive
-  105           | relational • LE_OP additive
-  106           | relational • GT_OP additive
-  107           | relational • GE_OP additive
+  107 equality: relational •
+  111 relational: relational • LT_OP additive
+  112           | relational • LE_OP additive
+  113           | relational • GT_OP additive
+  114           | relational • GE_OP additive
 
     LE_OP  shift, and go to state 97
     GE_OP  shift, and go to state 98
     LT_OP  shift, and go to state 99
     GT_OP  shift, and go to state 100
 
-    $default  reduce using rule 100 (equality)
+    $default  reduce using rule 107 (equality)
 
 
 State 65
 
-  103 relational: additive •
-  109 additive: additive • PLUS multiplicative
-  110         | additive • MINUS multiplicative
+  110 relational: additive •
+  116 additive: additive • PLUS multiplicative
+  117         | additive • MINUS multiplicative
 
     PLUS   shift, and go to state 101
     MINUS  shift, and go to state 102
 
-    $default  reduce using rule 103 (relational)
+    $default  reduce using rule 110 (relational)
 
 
 State 66
 
-  108 additive: multiplicative •
-  112 multiplicative: multiplicative • MULT unary
-  113               | multiplicative • DIV unary
-  114               | multiplicative • MOD unary
+  115 additive: multiplicative •
+  119 multiplicative: multiplicative • MULT unary
+  120               | multiplicative • DIV unary
+  121               | multiplicative • MOD unary
 
     MULT  shift, and go to state 103
     DIV   shift, and go to state 104
     MOD   shift, and go to state 105
 
-    $default  reduce using rule 108 (additive)
+    $default  reduce using rule 115 (additive)
 
 
 State 67
 
-  111 multiplicative: unary •
+  118 multiplicative: unary •
 
-    $default  reduce using rule 111 (multiplicative)
+    $default  reduce using rule 118 (multiplicative)
 
 
 State 68
 
-  115 unary: primary •
+  122 unary: primary •
 
-    $default  reduce using rule 115 (unary)
+    $default  reduce using rule 122 (unary)
 
 
 State 69
 
-  121 primary: bool_literal •
+  128 primary: bool_literal •
 
-    $default  reduce using rule 121 (primary)
+    $default  reduce using rule 128 (primary)
 
 
 State 70
 
-  123 primary: sensor_zeroarg •
+  130 primary: sensor_zeroarg •
 
-    $default  reduce using rule 123 (primary)
+    $default  reduce using rule 130 (primary)
 
 
 State 71
 
-  128 sensor_zeroarg: sensor_nome • LPAREN RPAREN
+  135 sensor_zeroarg: sensor_nome • LPAREN RPAREN
 
     LPAREN  shift, and go to state 106
 
 
 State 72
 
-   72 for_range_stmt: PARA IDENTIFIER • EM expr RANGE expr bloco
+   79 for_range_stmt: PARA IDENTIFIER • EM expr RANGE expr @7 bloco
 
     EM  shift, and go to state 107
 
@@ -1427,66 +1440,96 @@ State 82
 
 State 83
 
-   68 if_stmt: SE LPAREN expr • RPAREN stmt
-   69        | SE LPAREN expr • RPAREN stmt SENAO stmt
+   69 if_stmt: SE LPAREN expr • RPAREN @1 stmt
+   72        | SE LPAREN expr • RPAREN @2 stmt SENAO @3 stmt
 
     RPAREN  shift, and go to state 137
 
 
 State 84
 
-   70 while_stmt: ENQUANTO LPAREN expr • RPAREN stmt
+   75 while_stmt: ENQUANTO @4 LPAREN • expr RPAREN @5 stmt
 
-    RPAREN  shift, and go to state 138
+    TEMP        shift, and go to state 43
+    PRESSAO     shift, and go to state 44
+    AGUA        shift, and go to state 45
+    GRAOS       shift, and go to state 46
+    FLUXO       shift, and go to state 47
+    COPO        shift, and go to state 48
+    PORTA       shift, and go to state 49
+    VERDADEIRO  shift, and go to state 50
+    FALSO       shift, and go to state 51
+    NAO         shift, and go to state 52
+    LPAREN      shift, and go to state 53
+    PLUS        shift, and go to state 54
+    MINUS       shift, and go to state 55
+    NOT         shift, and go to state 56
+    IDENTIFIER  shift, and go to state 15
+    STRING      shift, and go to state 57
+    NUMBER      shift, and go to state 58
+
+    lvalue          go to state 59
+    expr            go to state 138
+    logic_or        go to state 61
+    logic_and       go to state 62
+    equality        go to state 63
+    relational      go to state 64
+    additive        go to state 65
+    multiplicative  go to state 66
+    unary           go to state 67
+    primary         go to state 68
+    bool_literal    go to state 69
+    sensor_zeroarg  go to state 70
+    sensor_nome     go to state 71
 
 
 State 85
 
-  119 unary: NAO unary •
+  126 unary: NAO unary •
 
-    $default  reduce using rule 119 (unary)
+    $default  reduce using rule 126 (unary)
 
 
 State 86
 
-  125 primary: LPAREN expr • RPAREN
+  132 primary: LPAREN expr • RPAREN
 
     RPAREN  shift, and go to state 139
 
 
 State 87
 
-  116 unary: PLUS unary •
+  123 unary: PLUS unary •
 
-    $default  reduce using rule 116 (unary)
+    $default  reduce using rule 123 (unary)
 
 
 State 88
 
-  117 unary: MINUS unary •
+  124 unary: MINUS unary •
 
-    $default  reduce using rule 117 (unary)
+    $default  reduce using rule 124 (unary)
 
 
 State 89
 
-  118 unary: NOT unary •
+  125 unary: NOT unary •
 
-    $default  reduce using rule 118 (unary)
+    $default  reduce using rule 125 (unary)
 
 
 State 90
 
-   71 repeat_stmt: REPETIR expr VEZES • bloco
+   77 repeat_stmt: REPETIR expr VEZES • @6 bloco
 
-    LBRACE  shift, and go to state 14
+    $default  reduce using rule 76 (@6)
 
-    bloco  go to state 140
+    @6  go to state 140
 
 
 State 91
 
-   95 logic_or: logic_or OU • logic_and
+  102 logic_or: logic_or OU • logic_and
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1521,7 +1564,7 @@ State 91
 
 State 92
 
-   96 logic_or: logic_or OR_OP • logic_and
+  103 logic_or: logic_or OR_OP • logic_and
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1556,7 +1599,7 @@ State 92
 
 State 93
 
-   98 logic_and: logic_and E • equality
+  105 logic_and: logic_and E • equality
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1590,7 +1633,7 @@ State 93
 
 State 94
 
-   99 logic_and: logic_and AND_OP • equality
+  106 logic_and: logic_and AND_OP • equality
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1624,7 +1667,7 @@ State 94
 
 State 95
 
-  101 equality: equality EQ_OP • relational
+  108 equality: equality EQ_OP • relational
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1657,7 +1700,7 @@ State 95
 
 State 96
 
-  102 equality: equality NE_OP • relational
+  109 equality: equality NE_OP • relational
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1690,7 +1733,7 @@ State 96
 
 State 97
 
-  105 relational: relational LE_OP • additive
+  112 relational: relational LE_OP • additive
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1722,7 +1765,7 @@ State 97
 
 State 98
 
-  107 relational: relational GE_OP • additive
+  114 relational: relational GE_OP • additive
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1754,7 +1797,7 @@ State 98
 
 State 99
 
-  104 relational: relational LT_OP • additive
+  111 relational: relational LT_OP • additive
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1786,7 +1829,7 @@ State 99
 
 State 100
 
-  106 relational: relational GT_OP • additive
+  113 relational: relational GT_OP • additive
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1818,7 +1861,7 @@ State 100
 
 State 101
 
-  109 additive: additive PLUS • multiplicative
+  116 additive: additive PLUS • multiplicative
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1849,7 +1892,7 @@ State 101
 
 State 102
 
-  110 additive: additive MINUS • multiplicative
+  117 additive: additive MINUS • multiplicative
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1880,7 +1923,7 @@ State 102
 
 State 103
 
-  112 multiplicative: multiplicative MULT • unary
+  119 multiplicative: multiplicative MULT • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1910,7 +1953,7 @@ State 103
 
 State 104
 
-  113 multiplicative: multiplicative DIV • unary
+  120 multiplicative: multiplicative DIV • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1940,7 +1983,7 @@ State 104
 
 State 105
 
-  114 multiplicative: multiplicative MOD • unary
+  121 multiplicative: multiplicative MOD • unary
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -1970,14 +2013,14 @@ State 105
 
 State 106
 
-  128 sensor_zeroarg: sensor_nome LPAREN • RPAREN
+  135 sensor_zeroarg: sensor_nome LPAREN • RPAREN
 
     RPAREN  shift, and go to state 156
 
 
 State 107
 
-   72 for_range_stmt: PARA IDENTIFIER EM • expr RANGE expr bloco
+   79 for_range_stmt: PARA IDENTIFIER EM • expr RANGE expr @7 bloco
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -2014,72 +2057,72 @@ State 107
 
 State 108
 
-   75 acao: MOER •
-
-    $default  reduce using rule 75 (acao)
-
-
-State 109
-
-   76 acao: AQUECER •
-
-    $default  reduce using rule 76 (acao)
-
-
-State 110
-
-   77 acao: BOMBEAR •
-
-    $default  reduce using rule 77 (acao)
-
-
-State 111
-
-   78 acao: SERVIR •
-
-    $default  reduce using rule 78 (acao)
-
-
-State 112
-
-   79 acao: VAPORIZAR •
-
-    $default  reduce using rule 79 (acao)
-
-
-State 113
-
-   80 acao: PAUSAR •
-
-    $default  reduce using rule 80 (acao)
-
-
-State 114
-
-   81 acao: TOCAR •
-
-    $default  reduce using rule 81 (acao)
-
-
-State 115
-
-   82 acao: LIMPAR •
+   82 acao: MOER •
 
     $default  reduce using rule 82 (acao)
 
 
-State 116
+State 109
 
-   83 acao: ENXAGUAR •
+   83 acao: AQUECER •
 
     $default  reduce using rule 83 (acao)
 
 
-State 117
+State 110
 
-   84 acao: DESPRESSURIZAR •
+   84 acao: BOMBEAR •
 
     $default  reduce using rule 84 (acao)
+
+
+State 111
+
+   85 acao: SERVIR •
+
+    $default  reduce using rule 85 (acao)
+
+
+State 112
+
+   86 acao: VAPORIZAR •
+
+    $default  reduce using rule 86 (acao)
+
+
+State 113
+
+   87 acao: PAUSAR •
+
+    $default  reduce using rule 87 (acao)
+
+
+State 114
+
+   88 acao: TOCAR •
+
+    $default  reduce using rule 88 (acao)
+
+
+State 115
+
+   89 acao: LIMPAR •
+
+    $default  reduce using rule 89 (acao)
+
+
+State 116
+
+   90 acao: ENXAGUAR •
+
+    $default  reduce using rule 90 (acao)
+
+
+State 117
+
+   91 acao: DESPRESSURIZAR •
+
+    $default  reduce using rule 91 (acao)
 
 
 State 118
@@ -2119,8 +2162,8 @@ State 122
 
 State 123
 
-   73 ato: acao •
-   74    | acao • argumentos
+   80 ato: acao •
+   81    | acao • argumentos
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -2140,7 +2183,7 @@ State 123
     STRING      shift, and go to state 159
     NUMBER      shift, and go to state 160
 
-    $default  reduce using rule 73 (ato)
+    $default  reduce using rule 80 (ato)
 
     lvalue          go to state 59
     argumentos      go to state 161
@@ -2300,254 +2343,243 @@ State 136
 
 State 137
 
-   68 if_stmt: SE LPAREN expr RPAREN • stmt
-   69        | SE LPAREN expr RPAREN • stmt SENAO stmt
+   69 if_stmt: SE LPAREN expr RPAREN • @1 stmt
+   72        | SE LPAREN expr RPAREN • @2 stmt SENAO @3 stmt
 
-    SE          shift, and go to state 8
-    ENQUANTO    shift, and go to state 9
-    REPETIR     shift, and go to state 10
-    PARA        shift, and go to state 11
-    SAIR        shift, and go to state 12
-    PULAR       shift, and go to state 13
-    LBRACE      shift, and go to state 14
-    IDENTIFIER  shift, and go to state 15
+    SE          reduce using rule 68 (@1)
+    SE          [reduce using rule 70 (@2)]
+    ENQUANTO    reduce using rule 68 (@1)
+    ENQUANTO    [reduce using rule 70 (@2)]
+    REPETIR     reduce using rule 68 (@1)
+    REPETIR     [reduce using rule 70 (@2)]
+    PARA        reduce using rule 68 (@1)
+    PARA        [reduce using rule 70 (@2)]
+    SAIR        reduce using rule 68 (@1)
+    SAIR        [reduce using rule 70 (@2)]
+    PULAR       reduce using rule 68 (@1)
+    PULAR       [reduce using rule 70 (@2)]
+    LBRACE      reduce using rule 68 (@1)
+    LBRACE      [reduce using rule 70 (@2)]
+    IDENTIFIER  reduce using rule 68 (@1)
+    IDENTIFIER  [reduce using rule 70 (@2)]
+    $default    reduce using rule 68 (@1)
 
-    stmt            go to state 183
-    bloco           go to state 24
-    assign          go to state 25
-    lvalue          go to state 26
-    if_stmt         go to state 27
-    while_stmt      go to state 28
-    repeat_stmt     go to state 29
-    for_range_stmt  go to state 30
+    @1  go to state 183
+    @2  go to state 184
 
 
 State 138
 
-   70 while_stmt: ENQUANTO LPAREN expr RPAREN • stmt
+   75 while_stmt: ENQUANTO @4 LPAREN expr • RPAREN @5 stmt
 
-    SE          shift, and go to state 8
-    ENQUANTO    shift, and go to state 9
-    REPETIR     shift, and go to state 10
-    PARA        shift, and go to state 11
-    SAIR        shift, and go to state 12
-    PULAR       shift, and go to state 13
-    LBRACE      shift, and go to state 14
-    IDENTIFIER  shift, and go to state 15
-
-    stmt            go to state 184
-    bloco           go to state 24
-    assign          go to state 25
-    lvalue          go to state 26
-    if_stmt         go to state 27
-    while_stmt      go to state 28
-    repeat_stmt     go to state 29
-    for_range_stmt  go to state 30
+    RPAREN  shift, and go to state 185
 
 
 State 139
 
-  125 primary: LPAREN expr RPAREN •
+  132 primary: LPAREN expr RPAREN •
 
-    $default  reduce using rule 125 (primary)
+    $default  reduce using rule 132 (primary)
 
 
 State 140
 
-   71 repeat_stmt: REPETIR expr VEZES bloco •
+   77 repeat_stmt: REPETIR expr VEZES @6 • bloco
 
-    $default  reduce using rule 71 (repeat_stmt)
+    LBRACE  shift, and go to state 14
+
+    bloco  go to state 186
 
 
 State 141
 
-   95 logic_or: logic_or OU logic_and •
-   98 logic_and: logic_and • E equality
-   99          | logic_and • AND_OP equality
+  102 logic_or: logic_or OU logic_and •
+  105 logic_and: logic_and • E equality
+  106          | logic_and • AND_OP equality
 
     E       shift, and go to state 93
     AND_OP  shift, and go to state 94
 
-    $default  reduce using rule 95 (logic_or)
+    $default  reduce using rule 102 (logic_or)
 
 
 State 142
 
-   96 logic_or: logic_or OR_OP logic_and •
-   98 logic_and: logic_and • E equality
-   99          | logic_and • AND_OP equality
+  103 logic_or: logic_or OR_OP logic_and •
+  105 logic_and: logic_and • E equality
+  106          | logic_and • AND_OP equality
 
     E       shift, and go to state 93
     AND_OP  shift, and go to state 94
 
-    $default  reduce using rule 96 (logic_or)
+    $default  reduce using rule 103 (logic_or)
 
 
 State 143
 
-   98 logic_and: logic_and E equality •
-  101 equality: equality • EQ_OP relational
-  102         | equality • NE_OP relational
+  105 logic_and: logic_and E equality •
+  108 equality: equality • EQ_OP relational
+  109         | equality • NE_OP relational
 
     EQ_OP  shift, and go to state 95
     NE_OP  shift, and go to state 96
 
-    $default  reduce using rule 98 (logic_and)
+    $default  reduce using rule 105 (logic_and)
 
 
 State 144
 
-   99 logic_and: logic_and AND_OP equality •
-  101 equality: equality • EQ_OP relational
-  102         | equality • NE_OP relational
+  106 logic_and: logic_and AND_OP equality •
+  108 equality: equality • EQ_OP relational
+  109         | equality • NE_OP relational
 
     EQ_OP  shift, and go to state 95
     NE_OP  shift, and go to state 96
 
-    $default  reduce using rule 99 (logic_and)
+    $default  reduce using rule 106 (logic_and)
 
 
 State 145
 
-  101 equality: equality EQ_OP relational •
-  104 relational: relational • LT_OP additive
-  105           | relational • LE_OP additive
-  106           | relational • GT_OP additive
-  107           | relational • GE_OP additive
+  108 equality: equality EQ_OP relational •
+  111 relational: relational • LT_OP additive
+  112           | relational • LE_OP additive
+  113           | relational • GT_OP additive
+  114           | relational • GE_OP additive
 
     LE_OP  shift, and go to state 97
     GE_OP  shift, and go to state 98
     LT_OP  shift, and go to state 99
     GT_OP  shift, and go to state 100
 
-    $default  reduce using rule 101 (equality)
+    $default  reduce using rule 108 (equality)
 
 
 State 146
 
-  102 equality: equality NE_OP relational •
-  104 relational: relational • LT_OP additive
-  105           | relational • LE_OP additive
-  106           | relational • GT_OP additive
-  107           | relational • GE_OP additive
+  109 equality: equality NE_OP relational •
+  111 relational: relational • LT_OP additive
+  112           | relational • LE_OP additive
+  113           | relational • GT_OP additive
+  114           | relational • GE_OP additive
 
     LE_OP  shift, and go to state 97
     GE_OP  shift, and go to state 98
     LT_OP  shift, and go to state 99
     GT_OP  shift, and go to state 100
 
-    $default  reduce using rule 102 (equality)
+    $default  reduce using rule 109 (equality)
 
 
 State 147
 
-  105 relational: relational LE_OP additive •
-  109 additive: additive • PLUS multiplicative
-  110         | additive • MINUS multiplicative
+  112 relational: relational LE_OP additive •
+  116 additive: additive • PLUS multiplicative
+  117         | additive • MINUS multiplicative
 
     PLUS   shift, and go to state 101
     MINUS  shift, and go to state 102
 
-    $default  reduce using rule 105 (relational)
+    $default  reduce using rule 112 (relational)
 
 
 State 148
 
-  107 relational: relational GE_OP additive •
-  109 additive: additive • PLUS multiplicative
-  110         | additive • MINUS multiplicative
+  114 relational: relational GE_OP additive •
+  116 additive: additive • PLUS multiplicative
+  117         | additive • MINUS multiplicative
 
     PLUS   shift, and go to state 101
     MINUS  shift, and go to state 102
 
-    $default  reduce using rule 107 (relational)
+    $default  reduce using rule 114 (relational)
 
 
 State 149
 
-  104 relational: relational LT_OP additive •
-  109 additive: additive • PLUS multiplicative
-  110         | additive • MINUS multiplicative
+  111 relational: relational LT_OP additive •
+  116 additive: additive • PLUS multiplicative
+  117         | additive • MINUS multiplicative
 
     PLUS   shift, and go to state 101
     MINUS  shift, and go to state 102
 
-    $default  reduce using rule 104 (relational)
+    $default  reduce using rule 111 (relational)
 
 
 State 150
 
-  106 relational: relational GT_OP additive •
-  109 additive: additive • PLUS multiplicative
-  110         | additive • MINUS multiplicative
+  113 relational: relational GT_OP additive •
+  116 additive: additive • PLUS multiplicative
+  117         | additive • MINUS multiplicative
 
     PLUS   shift, and go to state 101
     MINUS  shift, and go to state 102
 
-    $default  reduce using rule 106 (relational)
+    $default  reduce using rule 113 (relational)
 
 
 State 151
 
-  109 additive: additive PLUS multiplicative •
-  112 multiplicative: multiplicative • MULT unary
-  113               | multiplicative • DIV unary
-  114               | multiplicative • MOD unary
+  116 additive: additive PLUS multiplicative •
+  119 multiplicative: multiplicative • MULT unary
+  120               | multiplicative • DIV unary
+  121               | multiplicative • MOD unary
 
     MULT  shift, and go to state 103
     DIV   shift, and go to state 104
     MOD   shift, and go to state 105
 
-    $default  reduce using rule 109 (additive)
+    $default  reduce using rule 116 (additive)
 
 
 State 152
 
-  110 additive: additive MINUS multiplicative •
-  112 multiplicative: multiplicative • MULT unary
-  113               | multiplicative • DIV unary
-  114               | multiplicative • MOD unary
+  117 additive: additive MINUS multiplicative •
+  119 multiplicative: multiplicative • MULT unary
+  120               | multiplicative • DIV unary
+  121               | multiplicative • MOD unary
 
     MULT  shift, and go to state 103
     DIV   shift, and go to state 104
     MOD   shift, and go to state 105
 
-    $default  reduce using rule 110 (additive)
+    $default  reduce using rule 117 (additive)
 
 
 State 153
 
-  112 multiplicative: multiplicative MULT unary •
+  119 multiplicative: multiplicative MULT unary •
 
-    $default  reduce using rule 112 (multiplicative)
+    $default  reduce using rule 119 (multiplicative)
 
 
 State 154
 
-  113 multiplicative: multiplicative DIV unary •
+  120 multiplicative: multiplicative DIV unary •
 
-    $default  reduce using rule 113 (multiplicative)
+    $default  reduce using rule 120 (multiplicative)
 
 
 State 155
 
-  114 multiplicative: multiplicative MOD unary •
+  121 multiplicative: multiplicative MOD unary •
 
-    $default  reduce using rule 114 (multiplicative)
+    $default  reduce using rule 121 (multiplicative)
 
 
 State 156
 
-  128 sensor_zeroarg: sensor_nome LPAREN RPAREN •
+  135 sensor_zeroarg: sensor_nome LPAREN RPAREN •
 
-    $default  reduce using rule 128 (sensor_zeroarg)
+    $default  reduce using rule 135 (sensor_zeroarg)
 
 
 State 157
 
-   72 for_range_stmt: PARA IDENTIFIER EM expr • RANGE expr bloco
+   79 for_range_stmt: PARA IDENTIFIER EM expr • RANGE expr @7 bloco
 
-    RANGE  shift, and go to state 185
+    RANGE  shift, and go to state 187
 
 
 State 158
@@ -2559,118 +2591,118 @@ State 158
 
 State 159
 
-   92 arg: STRING •
-  122 primary: STRING •
+   99 arg: STRING •
+  129 primary: STRING •
 
-    SEMICOLON  reduce using rule 92 (arg)
-    SEMICOLON  [reduce using rule 122 (primary)]
-    COMMA      reduce using rule 92 (arg)
-    COMMA      [reduce using rule 122 (primary)]
-    $default   reduce using rule 122 (primary)
+    SEMICOLON  reduce using rule 99 (arg)
+    SEMICOLON  [reduce using rule 129 (primary)]
+    COMMA      reduce using rule 99 (arg)
+    COMMA      [reduce using rule 129 (primary)]
+    $default   reduce using rule 129 (primary)
 
 
 State 160
 
-  120 primary: NUMBER •
-  136 medida_vol: NUMBER • ML_TYPE
-  137 medida_peso: NUMBER • G_TYPE
-  138 medida_tempo: NUMBER • S_TYPE
-  139             | NUMBER • MS_TYPE
-  140 medida_temp: NUMBER • CELSIUS_UNIT
-  141            | NUMBER • C_UNIT
+  127 primary: NUMBER •
+  143 medida_vol: NUMBER • ML_TYPE
+  144 medida_peso: NUMBER • G_TYPE
+  145 medida_tempo: NUMBER • S_TYPE
+  146             | NUMBER • MS_TYPE
+  147 medida_temp: NUMBER • CELSIUS_UNIT
+  148            | NUMBER • C_UNIT
 
-    ML_TYPE       shift, and go to state 186
-    G_TYPE        shift, and go to state 187
-    S_TYPE        shift, and go to state 188
-    MS_TYPE       shift, and go to state 189
-    CELSIUS_UNIT  shift, and go to state 190
-    C_UNIT        shift, and go to state 191
+    ML_TYPE       shift, and go to state 188
+    G_TYPE        shift, and go to state 189
+    S_TYPE        shift, and go to state 190
+    MS_TYPE       shift, and go to state 191
+    CELSIUS_UNIT  shift, and go to state 192
+    C_UNIT        shift, and go to state 193
 
-    $default  reduce using rule 120 (primary)
+    $default  reduce using rule 127 (primary)
 
 
 State 161
 
-   74 ato: acao argumentos •
-   86 argumentos: argumentos • COMMA arg
+   81 ato: acao argumentos •
+   93 argumentos: argumentos • COMMA arg
 
-    COMMA  shift, and go to state 192
+    COMMA  shift, and go to state 194
 
-    $default  reduce using rule 74 (ato)
+    $default  reduce using rule 81 (ato)
 
 
 State 162
 
-   85 argumentos: arg •
+   92 argumentos: arg •
 
-    $default  reduce using rule 85 (argumentos)
+    $default  reduce using rule 92 (argumentos)
 
 
 State 163
 
-   87 arg: expr •
+   94 arg: expr •
 
-    $default  reduce using rule 87 (arg)
+    $default  reduce using rule 94 (arg)
 
 
 State 164
 
-   88 arg: medida_vol •
+   95 arg: medida_vol •
 
-    $default  reduce using rule 88 (arg)
+    $default  reduce using rule 95 (arg)
 
 
 State 165
 
-   89 arg: medida_peso •
+   96 arg: medida_peso •
 
-    $default  reduce using rule 89 (arg)
+    $default  reduce using rule 96 (arg)
 
 
 State 166
 
-   91 arg: medida_tempo •
+   98 arg: medida_tempo •
 
-    $default  reduce using rule 91 (arg)
+    $default  reduce using rule 98 (arg)
 
 
 State 167
 
-   90 arg: medida_temp •
+   97 arg: medida_temp •
 
-    $default  reduce using rule 90 (arg)
+    $default  reduce using rule 97 (arg)
 
 
 State 168
 
    23 decl_senso: PERFIL • LBRACE perf_items RBRACE SEMICOLON
 
-    LBRACE  shift, and go to state 193
+    LBRACE  shift, and go to state 195
 
 
 State 169
 
    24 decl_senso: TEMPERATURA • medida_temp SEMICOLON
 
-    NUMBER  shift, and go to state 194
+    NUMBER  shift, and go to state 196
 
-    medida_temp  go to state 195
+    medida_temp  go to state 197
 
 
 State 170
 
    25 decl_senso: EXTRAIR • medida_vol EM medida_tempo SEMICOLON
 
-    NUMBER  shift, and go to state 196
+    NUMBER  shift, and go to state 198
 
-    medida_vol  go to state 197
+    medida_vol  go to state 199
 
 
 State 171
 
    26 decl_senso: PRESSAO_ALVO • NUMBER BAR SEMICOLON
 
-    NUMBER  shift, and go to state 198
+    NUMBER  shift, and go to state 200
 
 
 State 172
@@ -2719,7 +2751,7 @@ State 178
 
    15 bloco_receita_item: ato • SEMICOLON
 
-    SEMICOLON  shift, and go to state 199
+    SEMICOLON  shift, and go to state 201
 
 
 State 179
@@ -2752,7 +2784,7 @@ State 180
     NUMBER      shift, and go to state 58
 
     lvalue          go to state 59
-    expr            go to state 200
+    expr            go to state 202
     logic_or        go to state 61
     logic_and       go to state 62
     equality        go to state 63
@@ -2796,7 +2828,7 @@ State 182
     NUMBER      shift, and go to state 58
 
     lvalue          go to state 59
-    expr            go to state 201
+    expr            go to state 203
     logic_or        go to state 61
     logic_and       go to state 62
     equality        go to state 63
@@ -2812,25 +2844,69 @@ State 182
 
 State 183
 
-   68 if_stmt: SE LPAREN expr RPAREN stmt •
-   69        | SE LPAREN expr RPAREN stmt • SENAO stmt
+   69 if_stmt: SE LPAREN expr RPAREN @1 • stmt
 
-    SENAO  shift, and go to state 202
+    SE          shift, and go to state 8
+    ENQUANTO    shift, and go to state 9
+    REPETIR     shift, and go to state 10
+    PARA        shift, and go to state 11
+    SAIR        shift, and go to state 12
+    PULAR       shift, and go to state 13
+    LBRACE      shift, and go to state 14
+    IDENTIFIER  shift, and go to state 15
 
-    SENAO     [reduce using rule 68 (if_stmt)]
-    $default  reduce using rule 68 (if_stmt)
+    stmt            go to state 204
+    bloco           go to state 24
+    assign          go to state 25
+    lvalue          go to state 26
+    if_stmt         go to state 27
+    while_stmt      go to state 28
+    repeat_stmt     go to state 29
+    for_range_stmt  go to state 30
 
 
 State 184
 
-   70 while_stmt: ENQUANTO LPAREN expr RPAREN stmt •
+   72 if_stmt: SE LPAREN expr RPAREN @2 • stmt SENAO @3 stmt
 
-    $default  reduce using rule 70 (while_stmt)
+    SE          shift, and go to state 8
+    ENQUANTO    shift, and go to state 9
+    REPETIR     shift, and go to state 10
+    PARA        shift, and go to state 11
+    SAIR        shift, and go to state 12
+    PULAR       shift, and go to state 13
+    LBRACE      shift, and go to state 14
+    IDENTIFIER  shift, and go to state 15
+
+    stmt            go to state 205
+    bloco           go to state 24
+    assign          go to state 25
+    lvalue          go to state 26
+    if_stmt         go to state 27
+    while_stmt      go to state 28
+    repeat_stmt     go to state 29
+    for_range_stmt  go to state 30
 
 
 State 185
 
-   72 for_range_stmt: PARA IDENTIFIER EM expr RANGE • expr bloco
+   75 while_stmt: ENQUANTO @4 LPAREN expr RPAREN • @5 stmt
+
+    $default  reduce using rule 74 (@5)
+
+    @5  go to state 206
+
+
+State 186
+
+   77 repeat_stmt: REPETIR expr VEZES @6 bloco •
+
+    $default  reduce using rule 77 (repeat_stmt)
+
+
+State 187
+
+   79 for_range_stmt: PARA IDENTIFIER EM expr RANGE • expr @7 bloco
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -2851,7 +2927,7 @@ State 185
     NUMBER      shift, and go to state 58
 
     lvalue          go to state 59
-    expr            go to state 203
+    expr            go to state 207
     logic_or        go to state 61
     logic_and       go to state 62
     equality        go to state 63
@@ -2865,51 +2941,51 @@ State 185
     sensor_nome     go to state 71
 
 
-State 186
-
-  136 medida_vol: NUMBER ML_TYPE •
-
-    $default  reduce using rule 136 (medida_vol)
-
-
-State 187
-
-  137 medida_peso: NUMBER G_TYPE •
-
-    $default  reduce using rule 137 (medida_peso)
-
-
 State 188
 
-  138 medida_tempo: NUMBER S_TYPE •
+  143 medida_vol: NUMBER ML_TYPE •
 
-    $default  reduce using rule 138 (medida_tempo)
+    $default  reduce using rule 143 (medida_vol)
 
 
 State 189
 
-  139 medida_tempo: NUMBER MS_TYPE •
+  144 medida_peso: NUMBER G_TYPE •
 
-    $default  reduce using rule 139 (medida_tempo)
+    $default  reduce using rule 144 (medida_peso)
 
 
 State 190
 
-  140 medida_temp: NUMBER CELSIUS_UNIT •
+  145 medida_tempo: NUMBER S_TYPE •
 
-    $default  reduce using rule 140 (medida_temp)
+    $default  reduce using rule 145 (medida_tempo)
 
 
 State 191
 
-  141 medida_temp: NUMBER C_UNIT •
+  146 medida_tempo: NUMBER MS_TYPE •
 
-    $default  reduce using rule 141 (medida_temp)
+    $default  reduce using rule 146 (medida_tempo)
 
 
 State 192
 
-   86 argumentos: argumentos COMMA • arg
+  147 medida_temp: NUMBER CELSIUS_UNIT •
+
+    $default  reduce using rule 147 (medida_temp)
+
+
+State 193
+
+  148 medida_temp: NUMBER C_UNIT •
+
+    $default  reduce using rule 148 (medida_temp)
+
+
+State 194
+
+   93 argumentos: argumentos COMMA • arg
 
     TEMP        shift, and go to state 43
     PRESSAO     shift, and go to state 44
@@ -2930,7 +3006,7 @@ State 192
     NUMBER      shift, and go to state 160
 
     lvalue          go to state 59
-    arg             go to state 204
+    arg             go to state 208
     expr            go to state 163
     logic_or        go to state 61
     logic_and       go to state 62
@@ -2949,76 +3025,90 @@ State 192
     medida_temp     go to state 167
 
 
-State 193
+State 195
 
    23 decl_senso: PERFIL LBRACE • perf_items RBRACE SEMICOLON
 
     $default  reduce using rule 27 (perf_items)
 
-    perf_items  go to state 205
-
-
-State 194
-
-  140 medida_temp: NUMBER • CELSIUS_UNIT
-  141            | NUMBER • C_UNIT
-
-    CELSIUS_UNIT  shift, and go to state 190
-    C_UNIT        shift, and go to state 191
-
-
-State 195
-
-   24 decl_senso: TEMPERATURA medida_temp • SEMICOLON
-
-    SEMICOLON  shift, and go to state 206
+    perf_items  go to state 209
 
 
 State 196
 
-  136 medida_vol: NUMBER • ML_TYPE
+  147 medida_temp: NUMBER • CELSIUS_UNIT
+  148            | NUMBER • C_UNIT
 
-    ML_TYPE  shift, and go to state 186
+    CELSIUS_UNIT  shift, and go to state 192
+    C_UNIT        shift, and go to state 193
 
 
 State 197
 
-   25 decl_senso: EXTRAIR medida_vol • EM medida_tempo SEMICOLON
+   24 decl_senso: TEMPERATURA medida_temp • SEMICOLON
 
-    EM  shift, and go to state 207
+    SEMICOLON  shift, and go to state 210
 
 
 State 198
 
-   26 decl_senso: PRESSAO_ALVO NUMBER • BAR SEMICOLON
+  143 medida_vol: NUMBER • ML_TYPE
 
-    BAR  shift, and go to state 208
+    ML_TYPE  shift, and go to state 188
 
 
 State 199
+
+   25 decl_senso: EXTRAIR medida_vol • EM medida_tempo SEMICOLON
+
+    EM  shift, and go to state 211
+
+
+State 200
+
+   26 decl_senso: PRESSAO_ALVO NUMBER • BAR SEMICOLON
+
+    BAR  shift, and go to state 212
+
+
+State 201
 
    15 bloco_receita_item: ato SEMICOLON •
 
     $default  reduce using rule 15 (bloco_receita_item)
 
 
-State 200
+State 202
 
    42 var_decl: DEF IDENTIFIER COLON tipo ASSIGN_OP expr • SEMICOLON
 
-    SEMICOLON  shift, and go to state 209
+    SEMICOLON  shift, and go to state 213
 
 
-State 201
+State 203
 
    43 const_decl: CONST IDENTIFIER COLON tipo ASSIGN_OP expr • SEMICOLON
 
-    SEMICOLON  shift, and go to state 210
+    SEMICOLON  shift, and go to state 214
 
 
-State 202
+State 204
 
-   69 if_stmt: SE LPAREN expr RPAREN stmt SENAO • stmt
+   69 if_stmt: SE LPAREN expr RPAREN @1 stmt •
+
+    $default  reduce using rule 69 (if_stmt)
+
+
+State 205
+
+   72 if_stmt: SE LPAREN expr RPAREN @2 stmt • SENAO @3 stmt
+
+    SENAO  shift, and go to state 215
+
+
+State 206
+
+   75 while_stmt: ENQUANTO @4 LPAREN expr RPAREN @5 • stmt
 
     SE          shift, and go to state 8
     ENQUANTO    shift, and go to state 9
@@ -3029,7 +3119,7 @@ State 202
     LBRACE      shift, and go to state 14
     IDENTIFIER  shift, and go to state 15
 
-    stmt            go to state 211
+    stmt            go to state 216
     bloco           go to state 24
     assign          go to state 25
     lvalue          go to state 26
@@ -3039,264 +3129,312 @@ State 202
     for_range_stmt  go to state 30
 
 
-State 203
+State 207
 
-   72 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr • bloco
+   79 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr • @7 bloco
 
-    LBRACE  shift, and go to state 14
+    $default  reduce using rule 78 (@7)
 
-    bloco  go to state 212
-
-
-State 204
-
-   86 argumentos: argumentos COMMA arg •
-
-    $default  reduce using rule 86 (argumentos)
+    @7  go to state 217
 
 
-State 205
+State 208
+
+   93 argumentos: argumentos COMMA arg •
+
+    $default  reduce using rule 93 (argumentos)
+
+
+State 209
 
    23 decl_senso: PERFIL LBRACE perf_items • RBRACE SEMICOLON
    28 perf_items: perf_items • perf_item
 
-    CORPO        shift, and go to state 213
-    ACIDEZ       shift, and go to state 214
-    AROMA        shift, and go to state 215
-    INTENSIDADE  shift, and go to state 216
-    RBRACE       shift, and go to state 217
+    CORPO        shift, and go to state 218
+    ACIDEZ       shift, and go to state 219
+    AROMA        shift, and go to state 220
+    INTENSIDADE  shift, and go to state 221
+    RBRACE       shift, and go to state 222
 
-    perf_item  go to state 218
+    perf_item  go to state 223
 
 
-State 206
+State 210
 
    24 decl_senso: TEMPERATURA medida_temp SEMICOLON •
 
     $default  reduce using rule 24 (decl_senso)
 
 
-State 207
+State 211
 
    25 decl_senso: EXTRAIR medida_vol EM • medida_tempo SEMICOLON
 
-    NUMBER  shift, and go to state 219
+    NUMBER  shift, and go to state 224
 
-    medida_tempo  go to state 220
+    medida_tempo  go to state 225
 
 
-State 208
+State 212
 
    26 decl_senso: PRESSAO_ALVO NUMBER BAR • SEMICOLON
 
-    SEMICOLON  shift, and go to state 221
+    SEMICOLON  shift, and go to state 226
 
 
-State 209
+State 213
 
    42 var_decl: DEF IDENTIFIER COLON tipo ASSIGN_OP expr SEMICOLON •
 
     $default  reduce using rule 42 (var_decl)
 
 
-State 210
+State 214
 
    43 const_decl: CONST IDENTIFIER COLON tipo ASSIGN_OP expr SEMICOLON •
 
     $default  reduce using rule 43 (const_decl)
 
 
-State 211
-
-   69 if_stmt: SE LPAREN expr RPAREN stmt SENAO stmt •
-
-    $default  reduce using rule 69 (if_stmt)
-
-
-State 212
-
-   72 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr bloco •
-
-    $default  reduce using rule 72 (for_range_stmt)
-
-
-State 213
-
-   29 perf_item: CORPO • nivel SEMICOLON
-
-    SUAVE    shift, and go to state 222
-    MEDIO    shift, and go to state 223
-    FORTE    shift, and go to state 224
-    INTENSO  shift, and go to state 225
-
-    nivel  go to state 226
-
-
-State 214
-
-   30 perf_item: ACIDEZ • nivel SEMICOLON
-
-    SUAVE    shift, and go to state 222
-    MEDIO    shift, and go to state 223
-    FORTE    shift, and go to state 224
-    INTENSO  shift, and go to state 225
-
-    nivel  go to state 227
-
-
 State 215
 
-   31 perf_item: AROMA • nivel SEMICOLON
+   72 if_stmt: SE LPAREN expr RPAREN @2 stmt SENAO • @3 stmt
 
-    SUAVE    shift, and go to state 222
-    MEDIO    shift, and go to state 223
-    FORTE    shift, and go to state 224
-    INTENSO  shift, and go to state 225
+    $default  reduce using rule 71 (@3)
 
-    nivel  go to state 228
+    @3  go to state 227
 
 
 State 216
 
-   32 perf_item: INTENSIDADE • nivel SEMICOLON
+   75 while_stmt: ENQUANTO @4 LPAREN expr RPAREN @5 stmt •
 
-    SUAVE    shift, and go to state 222
-    MEDIO    shift, and go to state 223
-    FORTE    shift, and go to state 224
-    INTENSO  shift, and go to state 225
-
-    nivel  go to state 229
+    $default  reduce using rule 75 (while_stmt)
 
 
 State 217
 
-   23 decl_senso: PERFIL LBRACE perf_items RBRACE • SEMICOLON
+   79 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr @7 • bloco
 
-    SEMICOLON  shift, and go to state 230
+    LBRACE  shift, and go to state 14
+
+    bloco  go to state 228
 
 
 State 218
+
+   29 perf_item: CORPO • nivel SEMICOLON
+
+    SUAVE    shift, and go to state 229
+    MEDIO    shift, and go to state 230
+    FORTE    shift, and go to state 231
+    INTENSO  shift, and go to state 232
+
+    nivel  go to state 233
+
+
+State 219
+
+   30 perf_item: ACIDEZ • nivel SEMICOLON
+
+    SUAVE    shift, and go to state 229
+    MEDIO    shift, and go to state 230
+    FORTE    shift, and go to state 231
+    INTENSO  shift, and go to state 232
+
+    nivel  go to state 234
+
+
+State 220
+
+   31 perf_item: AROMA • nivel SEMICOLON
+
+    SUAVE    shift, and go to state 229
+    MEDIO    shift, and go to state 230
+    FORTE    shift, and go to state 231
+    INTENSO  shift, and go to state 232
+
+    nivel  go to state 235
+
+
+State 221
+
+   32 perf_item: INTENSIDADE • nivel SEMICOLON
+
+    SUAVE    shift, and go to state 229
+    MEDIO    shift, and go to state 230
+    FORTE    shift, and go to state 231
+    INTENSO  shift, and go to state 232
+
+    nivel  go to state 236
+
+
+State 222
+
+   23 decl_senso: PERFIL LBRACE perf_items RBRACE • SEMICOLON
+
+    SEMICOLON  shift, and go to state 237
+
+
+State 223
 
    28 perf_items: perf_items perf_item •
 
     $default  reduce using rule 28 (perf_items)
 
 
-State 219
+State 224
 
-  138 medida_tempo: NUMBER • S_TYPE
-  139             | NUMBER • MS_TYPE
+  145 medida_tempo: NUMBER • S_TYPE
+  146             | NUMBER • MS_TYPE
 
-    S_TYPE   shift, and go to state 188
-    MS_TYPE  shift, and go to state 189
+    S_TYPE   shift, and go to state 190
+    MS_TYPE  shift, and go to state 191
 
 
-State 220
+State 225
 
    25 decl_senso: EXTRAIR medida_vol EM medida_tempo • SEMICOLON
 
-    SEMICOLON  shift, and go to state 231
+    SEMICOLON  shift, and go to state 238
 
 
-State 221
+State 226
 
    26 decl_senso: PRESSAO_ALVO NUMBER BAR SEMICOLON •
 
     $default  reduce using rule 26 (decl_senso)
 
 
-State 222
+State 227
+
+   72 if_stmt: SE LPAREN expr RPAREN @2 stmt SENAO @3 • stmt
+
+    SE          shift, and go to state 8
+    ENQUANTO    shift, and go to state 9
+    REPETIR     shift, and go to state 10
+    PARA        shift, and go to state 11
+    SAIR        shift, and go to state 12
+    PULAR       shift, and go to state 13
+    LBRACE      shift, and go to state 14
+    IDENTIFIER  shift, and go to state 15
+
+    stmt            go to state 239
+    bloco           go to state 24
+    assign          go to state 25
+    lvalue          go to state 26
+    if_stmt         go to state 27
+    while_stmt      go to state 28
+    repeat_stmt     go to state 29
+    for_range_stmt  go to state 30
+
+
+State 228
+
+   79 for_range_stmt: PARA IDENTIFIER EM expr RANGE expr @7 bloco •
+
+    $default  reduce using rule 79 (for_range_stmt)
+
+
+State 229
 
    33 nivel: SUAVE •
 
     $default  reduce using rule 33 (nivel)
 
 
-State 223
+State 230
 
    34 nivel: MEDIO •
 
     $default  reduce using rule 34 (nivel)
 
 
-State 224
+State 231
 
    35 nivel: FORTE •
 
     $default  reduce using rule 35 (nivel)
 
 
-State 225
+State 232
 
    36 nivel: INTENSO •
 
     $default  reduce using rule 36 (nivel)
 
 
-State 226
+State 233
 
    29 perf_item: CORPO nivel • SEMICOLON
 
-    SEMICOLON  shift, and go to state 232
+    SEMICOLON  shift, and go to state 240
 
 
-State 227
+State 234
 
    30 perf_item: ACIDEZ nivel • SEMICOLON
 
-    SEMICOLON  shift, and go to state 233
+    SEMICOLON  shift, and go to state 241
 
 
-State 228
+State 235
 
    31 perf_item: AROMA nivel • SEMICOLON
 
-    SEMICOLON  shift, and go to state 234
+    SEMICOLON  shift, and go to state 242
 
 
-State 229
+State 236
 
    32 perf_item: INTENSIDADE nivel • SEMICOLON
 
-    SEMICOLON  shift, and go to state 235
+    SEMICOLON  shift, and go to state 243
 
 
-State 230
+State 237
 
    23 decl_senso: PERFIL LBRACE perf_items RBRACE SEMICOLON •
 
     $default  reduce using rule 23 (decl_senso)
 
 
-State 231
+State 238
 
    25 decl_senso: EXTRAIR medida_vol EM medida_tempo SEMICOLON •
 
     $default  reduce using rule 25 (decl_senso)
 
 
-State 232
+State 239
+
+   72 if_stmt: SE LPAREN expr RPAREN @2 stmt SENAO @3 stmt •
+
+    $default  reduce using rule 72 (if_stmt)
+
+
+State 240
 
    29 perf_item: CORPO nivel SEMICOLON •
 
     $default  reduce using rule 29 (perf_item)
 
 
-State 233
+State 241
 
    30 perf_item: ACIDEZ nivel SEMICOLON •
 
     $default  reduce using rule 30 (perf_item)
 
 
-State 234
+State 242
 
    31 perf_item: AROMA nivel SEMICOLON •
 
     $default  reduce using rule 31 (perf_item)
 
 
-State 235
+State 243
 
    32 perf_item: INTENSIDADE nivel SEMICOLON •
 
